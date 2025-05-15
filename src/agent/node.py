@@ -1,11 +1,17 @@
 from langchain_core.runnables import RunnableConfig
 from langgraph.prebuilt import ToolNode
+from langchain_core.messages import SystemMessage, AIMessage
 
 from src.model.agent import State
+from src.agent.llm import llm_topic_checker
+from src.agent.prompt import isCheeseChat
 
 def topic_checker(state: State, config: RunnableConfig):
-    print("topic_checker")
-    return {}
+    print("=" * 10 + "topic_checker" + "=" * 10)
+
+    result = llm_topic_checker.invoke([SystemMessage(content=isCheeseChat)] + state["messages"], config)
+
+    return {"is_topic": result["result"]}
 
 def general_chatbot(state: State, config: RunnableConfig):
     print("general_chatbot")

@@ -69,7 +69,6 @@ if __name__ == "__main__":
         stream_mode="values",
     )
     for event in events:
-        print(f"event => {event.name}")
         if "messages" in event:
             event["messages"][-1].pretty_print()
 

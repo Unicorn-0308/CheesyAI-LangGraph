@@ -23,9 +23,12 @@ class State(TypedDict):
     chat_history: Annotated[list[AnyMessage], add_messages]
     messages: Annotated[list[AnyMessage], add_messages]
 
-    next_action: Literal["history_filter", "context_collector", "request_query", "final_chatbot"]
-    total_context_num: int
-    output_context_num: int
-    is_topic: bool
+    next_action: Annotated[Literal["history_filter", "context_collector", "request_query", "final_chatbot"], ..., "final_chatbot"]
+    total_context_num: Annotated[int, ..., 0]
+    output_context_num: Annotated[int, ..., 0]
+    is_topic: Annotated[bool, ..., True]
+
+class Output_Topic_Checker(TypedDict):
+    result: Annotated[bool, None, "Is the query related to the topic, cheese?"]
 
 
