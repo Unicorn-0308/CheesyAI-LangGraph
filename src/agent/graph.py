@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Any, Dict, TypedDict
 
-from langgraph.graph import StateGraph
+from langgraph.graph import StateGraph, END
 
 from src.model.agent import State, Configuration
 from src.agent.node import (
@@ -12,7 +12,13 @@ from src.agent.node import (
     context_collector,
     final_chatbot,
     ask_more,
-    request_query
+    request_query,
+    feedback
+)
+from src.agent.edge import (
+    conditional_topic_checker,
+    conditional_reasoner,
+    conditional_final_chatbot
 )
 
 graph_builder = StateGraph(State, Configuration)
@@ -26,6 +32,44 @@ graph_builder.add_node("context_collector", context_collector)
 graph_builder.add_node("final_chatbot", final_chatbot)
 graph_builder.add_node("ask_more", ask_more)
 graph_builder.add_node("request_query", request_query)
+graph_builder.add_node("feedback", feedback)
 
 # Add Edges
+graph_builder.set_entry_point("topic_checker")
+graph_builder.add_conditional_edges("topic_checker", conditional_topic_checker)
+graph_builder.add_edge("general_chatbot", "feedback")
+
+graph_builder.add_conditional_edges("reasoner", conditional_reasoner)
+graph_builder.add_edge("history_filter", "reasoner")
+graph_builder.add_edge("context_collector", "reasoner")
+graph_builder.add_edge("request_query", "reasoner")
+graph_builder.add_conditional_edges("final_chatbot", conditional_final_chatbot)
+graph_builder.add_edge("ask_more", "final_chatbot")
+
+graph_builder.add_edge("feedback", END)
+
+
+if __name__ == "__main__":
+    graph = graph_builder.compile()
+
+    events = graph.stream(
+        {
+            "messages": [{"role": "user", "content": "Hello!"}],
+            "is_topic": True,
+            "next_action": "final_chatbot",
+            "total_context_num": 0,
+            "output_context_num": 0,
+        },
+        {
+            "configurable": {
+                "user_name": "Henrry Grant",
+                "thread_id": "1"
+            }
+        },
+        stream_mode="values",
+    )
+    for event in events:
+        print(f"event => {event.name}")
+        if "messages" in event:
+            event["messages"][-1].pretty_print()
 

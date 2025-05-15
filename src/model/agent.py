@@ -1,4 +1,4 @@
-from typing import TypedDict
+from typing import TypedDict, Literal
 from dataclasses import dataclass
 from typing_extensions import Annotated
 
@@ -22,5 +22,10 @@ class State(TypedDict):
     """
     chat_history: Annotated[list[AnyMessage], add_messages]
     messages: Annotated[list[AnyMessage], add_messages]
-    
+
+    next_action: Literal["history_filter", "context_collector", "request_query", "final_chatbot"]
+    total_context_num: int
+    output_context_num: int
+    is_topic: bool
+
 
