@@ -1,10 +1,12 @@
 import json
 from dotenv import load_dotenv
+
 load_dotenv(".env")
 
 from langchain_core.messages import HumanMessage
 from langgraph.checkpoint.memory import InMemorySaver
 from langgraph.types import Command
+from langchain_core.runnables.graph import MermaidDrawMethod
 
 from src.agent.graph import graph_builder
 from src.agent.prompt import hello
@@ -15,7 +17,7 @@ if __name__ == "__main__":
 
     checkpointer = InMemorySaver()
     graph = graph_builder.compile(checkpointer=checkpointer)
-    graph_code = graph.get_graph().draw_mermaid()
+    # graph_code = graph.get_graph().draw_png('assets/graph.png')
 
     print(f"Bot: {hello}")
 
@@ -33,7 +35,7 @@ if __name__ == "__main__":
         "total_context_num": 0,
         "output_context_num": 0,
         "is_topic": True,
-        "current_query": '',
+        "current": '',
         "interrupted": False
     }
 

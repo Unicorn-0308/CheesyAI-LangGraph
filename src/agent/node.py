@@ -28,18 +28,29 @@ from src.agent.tool import mongo_filter, mongo_aggregation, pinecone_search
 def topic_checker(state: State, config: RunnableConfig):
     print("\n\ntopic_checker" + "=" * 30)
     result = llm_topic_checker.invoke([SystemMessage(content=isCheeseChat)] + state["chat_history"] + [state["messages"][-1]], config)
-    return {"messages": [AIMessage(content=result["reason"])], "is_topic": result["result"]}
+    return {
+        "messages": [AIMessage(content=result["reason"])],
+        "is_topic": result["result"],
+        "current": "topic_checker",
+    }
 
 def general_chatbot(state: State, config: RunnableConfig):
     print("\n\ngeneral_chatbot" + "=" * 30)
     result = llm_general_chatbot.invoke([SystemMessage(content=general)] + state["chat_history"] + state["messages"][-2:], config)
-    return {"chat_history": [state["messages"][-2], result]}
+    return {
+        "messages": [result],
+        "chat_history": [result],
+        "current": "general_chatbot",
+    }
 
 def history_filter(state: State, config: RunnableConfig):
     print("\n\nhistory_filter" + "=" * 30)
-    result = llm_history_filter.invoke([SystemMessage(content=history)] + state["chat_history"], config)
-    messages = [RemoveMessage(id=REMOVE_ALL_MESSAGES), state["messages"][-2], SystemMessage(content=f" In this conversation so far, {result.content}")]
-    return {"messages": messages, "chat_history": [state["messages"][-2]]}
+    result = llm_history_filter.invoke([SystemMessage(content=history)] + state["chat_history"][:-3] if len(state["chat_history"]) > 1 else [] + state["messages"], config)
+    messages = [RemoveMessage(m.id) for m in state["messages"][:-2]] + [SystemMessage(content=f" In this conversation so far, {result.content}")]
+    return {
+        "messages": messages,
+        "current": "history_filter",
+    }
 
 # history_filter = SummarizationNode(
 #     token_counter=count_tokens_approximately,
@@ -56,37 +67,50 @@ def reasoner(state: State, config: RunnableConfig):
     return {
         "messages": [AIMessage(content=result["reason"])],
         "next_action": result["choice"],
-        "current_query": result["query"],
-        "interrupted": result["choice"] == "request_query"
+        "interrupted": result["choice"] == "request_query",
+        "chat_history": [AIMessage(content=result["query"])] if result["choice"] == "request_query" else [],
+        "current": "reasoner",
     }
 
 def data_collector(state: State, config: RunnableConfig):
     print("\n\ndata_collector" + "=" * 30)
     result = llm_tools.invoke([SystemMessage(content=query2tool)] + state["messages"], config)
-    return {"messages": [result]}
+    return {
+        "messages": [result],
+        "current": "data_collector",
+    }
 
 tool_node = ToolNode([mongo_filter, mongo_aggregation, pinecone_search])
 
 def final_chatbot(state: State, config: RunnableConfig):
     print("\n\nfinal_chatbot" + "=" * 30)
     result = llm_final_chatbot.invoke([SystemMessage(content=system)] + state["messages"], config)
-    return {"messages": [result], "chat_history": [result]}
+    return {
+        "messages": [result],
+        "chat_history": [result],
+        "current": "final_chatbot",
+    }
 
 def ask_more(state: State, config: RunnableConfig):
     print("\n\nask_more" + "=" * 30)
-    return {}
+    return {
+        "current": "ask_more",
+    }
 
 def request_query(state: State, config: RunnableConfig):
     print("\n\nrequest_query" + "=" * 30)
     result = interrupt({
-        "query": state["current_query"],
+        "query": state["chat_history"][-1].content,
     })
     return {
         "messages": [HumanMessage(content=result)],
-        "chat_history": [AIMessage(content=state["current_query"]), HumanMessage(content=result)]
+        "chat_history": [HumanMessage(content=result)],
+        "current": "request_query",
     }
 
 def feedback(state: State, config: RunnableConfig):
     print("\n\nfeedback" + "=" * 30)
-    return {}
+    return {
+        "current": "feedback",
+    }
 

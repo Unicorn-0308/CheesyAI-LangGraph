@@ -28,7 +28,7 @@ class State(TypedDict):
     total_context_num: int
     output_context_num: int
     is_topic: bool
-    current_query: str
+    current: str
     interrupted: bool
 
 class Output_Topic_Checker(TypedDict):
@@ -38,6 +38,6 @@ class Output_Topic_Checker(TypedDict):
 class Choice_Reasoner(TypedDict):
     choice: Literal["request_query", "data_collector", "final_chatbot"]
     reason: Annotated[str, None, "The reason for why you choose this action."]
-    query: Annotated[str, None, "The question that you ask to tool or user for getting necessary data."]
+    query: Annotated[str, None, "The question that you ask to user for getting necessary data."]
 
 

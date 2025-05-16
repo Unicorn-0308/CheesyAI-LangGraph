@@ -9,6 +9,7 @@ Based on the user's LATEST query, context and the conversation history(between u
      - If the user's last query is not obvious, choose it.
      - If you need some additional data that doesn't exist in database and is necessary to response user's query, choose it.
      - For example, if user asked "What is the price of it?" and you don't know what "it" is, choose it.
+     - If you choose it, the query you will create is for user. So create query for user, like "What is your favourite color?".
   2. Retrieve Data
      - Choose this choice if data(including context, conversation history) you have is not enough for the query.
      - You have 3 tools("mongo_filter", "mongo_aggregation", "pinecone_search") to retrieve data and use them.
@@ -22,7 +23,7 @@ Based on the user's LATEST query, context and the conversation history(between u
 * Give the reason for why you choose a choice in details.
   - The reason must be neat and tidy.
   - The reason must follow the markdown structure to be human-read-friendly.
-* Give the question that you want user or tool to answer to.
+* Give the question that you want user to answer to.
 
 # Data Fields
 MongoDB and Pinecone metadat have such fields.
