@@ -5,7 +5,7 @@ from src.model.agent import State
 def conditional_topic_checker(state: State) -> Literal["general_chatbot", "reasoner"]:
     return "reasoner" if state["is_topic"] else "general_chatbot"
 
-def conditional_reasoner(state: State) -> Literal["history_filter", "context_collector", "request_query", "final_chatbot"]:
+def conditional_reasoner(state: State) -> Literal["history_filter", "data_collector", "request_query", "final_chatbot"]:
     return state["next_action"]
 
 def conditional_final_chatbot(state: State) -> Literal["ask_more", "feedback"]:

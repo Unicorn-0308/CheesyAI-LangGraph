@@ -12,7 +12,7 @@ if __name__ == "__main__":
 
     events = graph.stream(
         {
-            "messages": [HumanMessage(content="Hello! What is the most expensive?")],
+            "messages": [HumanMessage(content="Hello! What is the most expensive? And what is the cheapest?")],
             "is_topic": True,
             "next_action": "final_chatbot",
             "total_context_num": 0,

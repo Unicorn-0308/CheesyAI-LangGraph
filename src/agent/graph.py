@@ -9,7 +9,8 @@ from src.agent.node import (
     general_chatbot,
     reasoner,
     history_filter,
-    context_collector,
+    data_collector,
+    tool_node,
     final_chatbot,
     ask_more,
     request_query,
@@ -28,7 +29,8 @@ graph_builder.add_node("topic_checker", topic_checker)
 graph_builder.add_node("general_chatbot", general_chatbot)
 graph_builder.add_node("reasoner", reasoner)
 graph_builder.add_node("history_filter", history_filter)
-graph_builder.add_node("context_collector", context_collector)
+graph_builder.add_node("data_collector", data_collector)
+graph_builder.add_node("tools", tool_node)
 graph_builder.add_node("final_chatbot", final_chatbot)
 graph_builder.add_node("ask_more", ask_more)
 graph_builder.add_node("request_query", request_query)
@@ -41,7 +43,8 @@ graph_builder.add_edge("general_chatbot", "feedback")
 
 graph_builder.add_conditional_edges("reasoner", conditional_reasoner)
 graph_builder.add_edge("history_filter", "reasoner")
-graph_builder.add_edge("context_collector", "reasoner")
+graph_builder.add_edge("data_collector", "tools")
+graph_builder.add_edge("tools", "reasoner")
 graph_builder.add_edge("request_query", "reasoner")
 graph_builder.add_conditional_edges("final_chatbot", conditional_final_chatbot)
 graph_builder.add_edge("ask_more", "final_chatbot")
