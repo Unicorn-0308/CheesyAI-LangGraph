@@ -3,7 +3,10 @@ import uuid
 import re
 from dotenv import load_dotenv
 import streamlit as st
-load_dotenv('.env')
+try:
+    load_dotenv('.env')
+except:
+    pass
 
 from langchain_core.messages import HumanMessage, AIMessage, ToolMessage, SystemMessage
 from langgraph.checkpoint.memory import InMemorySaver
