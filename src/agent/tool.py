@@ -1,6 +1,9 @@
+import os
+
 from langchain_core.tools import tool
 
 from src.db.MongoDB import mongo
+from src.db.PineconeIndex import pinecone
 
 
 @tool("mongo_filter", parse_docstring=True)
@@ -43,10 +46,11 @@ def mongo_aggregation(pipeline: list) -> str:
     return result
 
 @tool("pinecone_search", parse_docstring=True)
-def pinecone_search(filter: object, limit: int) -> str:
+def pinecone_search(query: str, filter: object, limit: int) -> str:
     """Get a cheese data from Pinecone VectorDB.
 
     Args:
+        query: Query to get data for user's query from Pinecone VectorDB.
         filter: An object containing key-value pairs for filtering.
            - Keys for filtering MUST be from the below list of available metadata fields.
            - Values should be extracted or inferred from the user's query and the conversation history.
@@ -55,4 +59,12 @@ def pinecone_search(filter: object, limit: int) -> str:
         limit : An integer representing the number of results to retrieve.
             - Range is 1~1000.
     """
-    return "pinecone_search"
+    embedding = pinecone.generate_embedding(query)
+    results = pinecone.indexModel.query(
+        vector=embedding,
+        filter=filter,
+        top_k=limit,
+        include_metadata=True,
+        namespace=os.environ["PINECONE_ENV"]
+    )
+    return results.get("matches", [])
