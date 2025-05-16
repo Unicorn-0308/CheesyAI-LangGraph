@@ -32,14 +32,14 @@ def set_page_config():
 
 
 def set_page_style():
-    # st.markdown(
-    #     f"""
-    #     <style>
-    #     {open("assets/style.css").read()}
-    #     </style>
-    # """,
-    #     unsafe_allow_html=True,
-    # )
+    st.markdown(
+        f"""
+        <style>
+        {open("assets/style.css").read()}
+        </style>
+    """,
+        unsafe_allow_html=True,
+    )
     pass
 
 
