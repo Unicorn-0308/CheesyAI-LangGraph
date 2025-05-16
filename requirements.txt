@@ -1,7 +1,5 @@
 certifi~=2024.12.14
-pymongo~=4.12.1
 pymongo[srv]==4.12.1
-pinecone~=6.0.2
 pinecone[grpc]==6.0.2
 pinecone-client~=2.2.4
 openai~=1.77.0
