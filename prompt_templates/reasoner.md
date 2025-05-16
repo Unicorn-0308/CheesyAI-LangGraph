@@ -4,13 +4,11 @@ Based on the user's LATEST query, context and the conversation history(between u
 
 # Instructions
 * You must analyze query, context and conversation history, then choose one of the following 3 choices.
-  1. History Filter
-     - Choose this choice if there are messages that aren't related to the query in conversation history.
-     - This choice is crucial. If there are unrelated messages, it can harm the final response to user. So in this case, do it first of all.
-     - For example,
-       - At the beginning, user asked "What is the most expensive?" and bot answered.
-       - Then user asked "What is the cheapest?".
-       - In this case, the first query and answer is not related to the second query, "the most cheapest". So you must choose history filter first.
+  1. Request Query
+     - Choose this choice to ask user when something is unclear.
+     - If the user's last query is not obvious, choose it.
+     - If you need some additional data that doesn't exist in database and is necessary to response user's query, choose it.
+     - For example, if user asked "What is the price of it?" and you don't know what "it" is, choose it.
   2. Retrieve Data
      - Choose this choice if data(including context, conversation history) you have is not enough for the query.
      - You have 3 tools("mongo_filter", "mongo_aggregation", "pinecone_search") to retrieve data and use them.
@@ -24,6 +22,7 @@ Based on the user's LATEST query, context and the conversation history(between u
 * Give the reason for why you choose a choice in details.
   - The reason must be neat and tidy.
   - The reason must follow the markdown structure to be human-read-friendly.
+* Give the question that you want user or tool to answer to.
 
 # Data Fields
 MongoDB and Pinecone metadat have such fields.
