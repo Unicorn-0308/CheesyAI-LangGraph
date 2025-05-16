@@ -50,7 +50,7 @@ class MongoDB:
             flag = False
         return skus, flag
 
-        
 
+mongo = MongoDB()
 
 

@@ -1,5 +1,8 @@
 from langchain_core.tools import tool
 
+from src.db.MongoDB import mongo
+
+
 @tool("mongo_filter", parse_docstring=True)
 def mongo_filter(query: object, sort: list, limit: int) -> str:
     """Get a cheese data array from MongoDB.
@@ -19,7 +22,12 @@ def mongo_filter(query: object, sort: list, limit: int) -> str:
            - The value must be enough for mongo to find the correct answer.
            - If the query asks to count all, this value must be as large as possible, i.e, 1000.
     """
-    return "mongo_filter"
+    result = mongo.collection.find(query)
+    if len(sort):
+        result = result.sort(sort)
+    result = result.limit(limit)
+    result = list(result)
+    return result
 
 @tool("mongo_aggregation", parse_docstring=True)
 def mongo_aggregation(pipeline: list) -> str:
@@ -30,7 +38,9 @@ def mongo_aggregation(pipeline: list) -> str:
             - Use only mongoDB aggregation expressions such as "$gt", "$group", "$unwind" and "$and" as operator.
             - This arg must make the result of mongoDB aggregation has semantic filed names such as "total_count", "num_brands".
     """
-    return "mongo_aggregation"
+    result = mongo.collection.aggregate(pipeline)
+    result = list(result)
+    return result
 
 @tool("pinecone_search", parse_docstring=True)
 def pinecone_search(filter: object, limit: int) -> str:

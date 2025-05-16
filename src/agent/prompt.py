@@ -6,14 +6,6 @@ with open("prompt_templates/isCheeseChat.md") as f:
     isCheeseChat = f.read()
     f.close()
 
-with open("prompt_templates/query2filter.md") as f:
-    query2filter = f.read()
-    f.close()
-
-with open("prompt_templates/query2mongo.md") as f:
-    query2mongo = f.read()
-    f.close()
-
 with open("prompt_templates/system.md") as f:
     system = f.read()
     f.close()
@@ -32,4 +24,8 @@ with open("prompt_templates/reasoner.md") as f:
 
 with open("prompt_templates/query2tool.md") as f:
     query2tool = f.read()
+    f.close()
+
+with open("prompt_templates/history.md") as f:
+    history = f.read()
     f.close()

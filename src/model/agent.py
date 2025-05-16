@@ -22,6 +22,7 @@ class State(TypedDict):
     """
     chat_history: Annotated[list[AnyMessage], add_messages]
     messages: Annotated[list[AnyMessage], add_messages]
+    filtered_history: list[AnyMessage]
 
     next_action: Annotated[Literal["history_filter", "data_collector", "request_query", "final_chatbot"], ..., "final_chatbot"]
     total_context_num: Annotated[int, ..., 0]
@@ -35,5 +36,8 @@ class Output_Topic_Checker(TypedDict):
 class Choice_Reasoner(TypedDict):
     choice: Literal["history_filter", "data_collector", "final_chatbot"]
     reason: Annotated[str, None, "The reason for why you choose this action."]
+
+class History_Filter(TypedDict):
+    chat: Annotated[list[AnyMessage], None, "Messages that are necessary to answer the user's query."]
 
 

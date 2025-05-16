@@ -5,27 +5,38 @@ load_dotenv(".env")
 from langchain_core.messages import HumanMessage
 
 from src.agent.graph import graph_builder
+from src.agent.prompt import hello
 
 
 if __name__ == "__main__":
     graph = graph_builder.compile()
 
-    events = graph.stream(
-        {
-            "messages": [HumanMessage(content="Hello! What is the most expensive? And what is the cheapest?")],
-            "is_topic": True,
-            "next_action": "final_chatbot",
-            "total_context_num": 0,
-            "output_context_num": 0,
-        },
-        {
-            "configurable": {
-                "user_name": "Henrry Grant",
-                "thread_id": "1"
-            }
-        },
-        stream_mode="values",
-    )
-    for event in events:
-        if "messages" in event:
-            event["messages"][-1].pretty_print()
+    print(f"Bot: {hello}")
+    while True:
+        user_query = input("You: ")
+        if user_query.lower() in ["quit", "exit", "bye"]:
+            print("Bot: Goodbye! Hope you enjoyed our cheesy chat!")
+            break
+
+        if not user_query.strip():
+            continue
+
+        events = graph.stream(
+            {
+                "messages": [HumanMessage(content=user_query)],
+                "is_topic": True,
+                "next_action": "final_chatbot",
+                "total_context_num": 0,
+                "output_context_num": 0,
+            },
+            {
+                "configurable": {
+                    "user_name": "Henrry Grant",
+                    "thread_id": "1"
+                }
+            },
+            stream_mode="values",
+        )
+        for event in events:
+            if "messages" in event:
+                event["messages"][-1].pretty_print()
