@@ -1,9 +1,11 @@
 from pinecone import Pinecone, ServerlessSpec
 import os, json
 
-from agent.openai_api import client
-from prompt_template import prompt_json2text
-from database.pinecone.utils import extract_first_float
+from openai import OpenAI
+from src.agent.prompt import prompt_json2text
+from src.util import extract_first_float
+
+client = OpenAI()
 
 class PineconeIndex:
 
@@ -128,6 +130,7 @@ class PineconeIndex:
         self.records = []
 
 
+pinecone = PineconeIndex()
 
 if __name__ == "__main__":
     index = PineconeIndex()
