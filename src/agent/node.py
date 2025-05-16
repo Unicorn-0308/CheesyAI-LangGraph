@@ -34,7 +34,7 @@ def general_chatbot(state: State, config: RunnableConfig):
 def reasoner(state: State, config: RunnableConfig):
     print("\n\nreasoner" + "=" * 30)
     result = llm_reasoner.invoke([SystemMessage(content=reasoning)] + state["messages"], config)
-    return {"messages": AIMessage(content=result["reason"]), "next_action": result["choice"]}
+    return {"messages": [AIMessage(content=result["reason"])], "next_action": result["choice"]}
 
 def history_filter(state: State, config: RunnableConfig):
     print("\n\nhistory_filter" + "=" * 30)

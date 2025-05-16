@@ -9,4 +9,5 @@ def conditional_reasoner(state: State) -> Literal["history_filter", "data_collec
     return state["next_action"]
 
 def conditional_final_chatbot(state: State) -> Literal["ask_more", "feedback"]:
-    return "ask_more" if state["output_context_num"] < state["total_context_num"] else "feedback"
+    # return "ask_more" if state["output_context_num"] < state["total_context_num"] else "feedback"
+    return "feedback"

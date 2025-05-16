@@ -5,7 +5,12 @@ Based on the user's LATEST query, context and the conversation history(between u
 # Instructions
 * You must analyze query, context and conversation history, then choose one of the following 3 choices.
   1. History Filter
-     - Choose this choice if there are unnecessary messages in conversation history.
+     - Choose this choice if there are messages that aren't related to the query in conversation history.
+     - This choice is crucial. If there are unrelated messages, it can harm the final response to user. So in this case, do it first of all.
+     - For example,
+       - At the beginning, user asked "What is the most expensive?" and bot answered.
+       - Then user asked "What is the cheapest?".
+       - In this case, the first query and answer is not related to the second query, "the most cheapest". So you must choose history filter first.
   2. Retrieve Data
      - Choose this choice if data(including context, conversation history) you have is not enough for the query.
      - You have 3 tools("mongo_filter", "mongo_aggregation", "pinecone_search") to retrieve data and use them.

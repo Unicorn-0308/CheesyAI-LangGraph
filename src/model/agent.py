@@ -1,6 +1,7 @@
 from typing import TypedDict, Literal
 from dataclasses import dataclass
 from typing_extensions import Annotated
+from pydantic import BaseModel, Field
 
 from langchain_core.messages import AnyMessage
 from langgraph.graph import add_messages
@@ -37,7 +38,10 @@ class Choice_Reasoner(TypedDict):
     choice: Literal["history_filter", "data_collector", "final_chatbot"]
     reason: Annotated[str, None, "The reason for why you choose this action."]
 
-class History_Filter(TypedDict):
+class History_Filter(BaseModel):
     chat: Annotated[list[AnyMessage], None, "Messages that are necessary to answer the user's query."]
+
+    class Config:
+        arbitrary_types_allowed = True
 
 
