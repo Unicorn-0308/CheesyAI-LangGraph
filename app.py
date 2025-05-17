@@ -211,7 +211,7 @@ def display_chat_history():
                                 display_reason(reason, index)
                                 if reason["node"] == "reasoner":
                                     index += 1
-                    st.markdown(message.content)
+                    st.html(message.content)
 
 
 def main():

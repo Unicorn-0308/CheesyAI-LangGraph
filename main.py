@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 
 load_dotenv(".env")
 
-from langchain_core.messages import HumanMessage
+from langchain_core.messages import HumanMessage, AIMessage
 from langgraph.checkpoint.memory import InMemorySaver
 from langgraph.types import Command
 from langchain_core.runnables.graph import MermaidDrawMethod
@@ -55,7 +55,7 @@ if __name__ == "__main__":
                     "messages": [HumanMessage(content=user_query)],
                 } if chat_index else {
                     **state,
-                    "messages": [HumanMessage(content=user_query)]
+                    "messages": [AIMessage(content="Hello, user."), HumanMessage(content=user_query)]
                 },
                 config,
                 stream_mode="values",
