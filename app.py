@@ -130,7 +130,7 @@ def process_reason(message, node):
             result = result.replace("False", "false")
             result = json.loads(result)
         except Exception as e:
-            result = []
+            result = ["Some Data..."]
         data = {
             "Name": message.name,
             "Result": result,
