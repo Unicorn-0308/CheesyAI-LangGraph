@@ -45,8 +45,8 @@ def general_chatbot(state: State, config: RunnableConfig):
 
 def history_filter(state: State, config: RunnableConfig):
     print("\n\nhistory_filter" + "=" * 30)
-    result = llm_history_filter.invoke([SystemMessage(content=history)] + state["chat_history"][:-3] if len(state["chat_history"]) > 1 else [] + state["messages"], config)
-    messages = [RemoveMessage(m.id) for m in state["messages"][:-2]] + [SystemMessage(content=f" In this conversation so far, {result.content}")]
+    result = llm_history_filter.invoke([SystemMessage(content=history)] + state["chat_history"][:-2] + state["messages"], config)
+    messages = [RemoveMessage(m.id) for m in state["messages"][:-2]] + [SystemMessage(content=f" In this conversation, {result.content}")]
     return {
         "messages": messages,
         "current": "history_filter",

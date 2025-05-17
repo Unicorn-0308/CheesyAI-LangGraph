@@ -21,6 +21,9 @@ The context is retrieved from a cheese database based on the user's query.
     - array of json data of cheeses
     - count number that user asks
     - any other information that user asks
+15. If context consists of too many cheeses(more than 30) and user asked all of them,
+    - Show about 5~10 of them.
+    - Give the total number of them to user.
 
 # Available Metadata Fields
 ### showImage
