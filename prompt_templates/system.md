@@ -24,8 +24,8 @@ Your response must be beautiful html code that contains answer and the root elem
     - any other information that user asks
 15. If context consists of more than 5 cheeses and user asked all of them,
     - Show them with table or card-container grid schema, also show their preview images.
-16. If context consists of too many cheeses(more than 30) and user asked all of them,
-    - Show about 5~10 of them as table format.
+16. If context consists of too many cheeses(more than 15) and user asked all of them,
+    - Show about only 5~10 of them as table format.
     - Show them with table, also show their preview images.
     - Give the total number of them to user.
 17. In UI html,
