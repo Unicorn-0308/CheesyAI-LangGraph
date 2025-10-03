@@ -62,7 +62,7 @@ def initialize_session_state():
         st.session_state.thinking = False
 
     if "reasoning" not in st.session_state:
-        st.session_state.reasoning = {}
+        st.session_state.reasoning = []
 
     if "config" not in st.session_state:
         st.session_state.config = {
@@ -198,19 +198,25 @@ def display_chat_history():
             unsafe_allow_html=True,
         )
     else:
+        i = -1
         for message in st.session_state.state["chat_history"]:
             if isinstance(message, HumanMessage):
                 with st.chat_message(name="user"):
                     st.markdown(message.content)
             else:
                 with st.chat_message(name="assistant", avatar="🤖"):
-                    if message.id not in [m.id for m in st.session_state.state["chat_history"][:2]]:
+                    if i > -1:
                         with st.expander("Reasoning", expanded=False):
-                            index = 1
-                            for reason in st.session_state.reasoning[message.id]:
-                                display_reason(reason, index)
-                                if reason["node"] == "reasoner":
-                                    index += 1
+                            try:
+                                index = 1
+                                for reason in st.session_state.reasoning[i]:
+                                    display_reason(reason, index)
+                                    if reason["node"] == "reasoner":
+                                        index += 1
+                            except:
+                                print(st.session_state.reasoning.keys())
+                                print("save", message.id)
+                    i += 1
                     st.html(message.content)
 
 
@@ -288,7 +294,7 @@ def main():
                                         index += 1
 
                 st.session_state.state = st.session_state.graph.get_state(st.session_state.config).values
-                st.session_state.reasoning[st.session_state.state["chat_history"][-1].id] = reasons
+                st.session_state.reasoning.append(reasons)
 
         except Exception as e:
             st.error(f"Error processing message: {str(e)}")
